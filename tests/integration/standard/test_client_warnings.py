@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+import pytest
 
 try:
     import unittest2 as unittest
@@ -26,8 +26,8 @@ from tests.integration import use_singledc, PROTOCOL_VERSION, local, TestCluster
 def setup_module():
     use_singledc()
 
-
-@unittest.skip('Failing with scylla')
+# @unittest.skip('Failing with scylla')
+# @pytest.mark.oren
 class ClientWarningTests(unittest.TestCase):
 
     @classmethod

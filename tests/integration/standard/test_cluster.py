@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import pytest
 
 try:
     import unittest2 as unittest
@@ -276,7 +277,8 @@ class ClusterTests(unittest.TestCase):
 
         cluster.shutdown()
 
-    @unittest.skip('Failing with scylla')
+    # @unittest.skip('Failing with scylla')
+    @pytest.mark.oren
     def test_invalid_protocol_negotation(self):
         """
         Test for protocol negotiation when explicit versions are set
@@ -1128,7 +1130,7 @@ class ClusterTests(unittest.TestCase):
             else:
                 raise Exception("session.execute didn't time out in {0} tries".format(max_retry_count))
 
-    @unittest.skip('Failing with scylla')
+    # @unittest.skip('Failing with scylla')
     def test_replicas_are_queried(self):
         """
         Test that replicas are queried first for TokenAwarePolicy. A table with RF 1
@@ -1441,6 +1443,7 @@ class DontPrepareOnIgnoredHostsTest(unittest.TestCase):
     ignored_addresses = ['127.0.0.3']
     ignore_node_3_policy = IgnoredHostPolicy(ignored_addresses)
 
+    @pytest.mark.oren
     def test_prepare_on_ignored_hosts(self):
 
         cluster = TestCluster(
@@ -1497,7 +1500,7 @@ class BetaProtocolTest(unittest.TestCase):
         except Exception as e:
             self.fail("Unexpected error encountered {0}".format(e.message))
 
-    @unittest.skip('Failing with scylla')
+    # @unittest.skip('Failing with scylla')
     @protocolv5
     def test_valid_protocol_version_beta_options_connect(self):
         """
@@ -1534,6 +1537,7 @@ class DeprecationWarningTest(unittest.TestCase):
             self.assertIn("Legacy execution parameters will be removed in 4.0. Consider using execution profiles.",
                           str(w[0].message))
 
+    @pytest.mark.oren
     def test_deprecation_warnings_meta_refreshed(self):
         """
         Tests the deprecation warning has been added when enabling
@@ -1552,7 +1556,8 @@ class DeprecationWarningTest(unittest.TestCase):
             self.assertIn("Cluster.set_meta_refresh_enabled is deprecated and will be removed in 4.0.",
                           str(w[0].message))
 
-    @unittest.skip('Failing with scylla')
+    # @unittest.skip('Failing with scylla')
+    @pytest.mark.oren
     def test_deprecation_warning_default_consistency_level(self):
         """
         Tests the deprecation warning has been added when enabling
