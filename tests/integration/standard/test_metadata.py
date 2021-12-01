@@ -245,7 +245,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
 
         self.check_create_statement(tablemeta, create_statement)
 
-    # @unittest.skip('Failing with scylla')
     def test_compound_primary_keys(self):
         create_statement = self.make_create_statement(["a"], ["b"], ["c"])
         create_statement += " WITH CLUSTERING ORDER BY (b ASC)"
@@ -258,7 +257,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
 
         self.check_create_statement(tablemeta, create_statement)
 
-    # @unittest.skip('Failing with scylla')
     def test_compound_primary_keys_protected(self):
         create_statement = self.make_create_statement(["Aa"], ["Bb"], ["Cc"])
         create_statement += ' WITH CLUSTERING ORDER BY ("Bb" ASC)'
@@ -271,7 +269,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
 
         self.check_create_statement(tablemeta, create_statement)
 
-    # @unittest.skip('Failing with scylla')
     def test_compound_primary_keys_more_columns(self):
         create_statement = self.make_create_statement(["a"], ["b", "c"], ["d", "e", "f"])
         create_statement += " WITH CLUSTERING ORDER BY (b ASC, c ASC)"
@@ -309,7 +306,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
 
         self.check_create_statement(tablemeta, create_statement)
 
-    # @unittest.skip('Failing with scylla')
     def test_compound_primary_keys_compact(self):
         create_statement = self.make_create_statement(["a"], ["b"], ["c"])
         create_statement += " WITH CLUSTERING ORDER BY (b ASC)"
@@ -344,7 +340,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
         c_column = tablemeta.columns['c']
         self.assertTrue(c_column.is_reversed)
 
-    # @unittest.skip('Failing with scylla')
     def test_compound_primary_keys_more_columns_compact(self):
         create_statement = self.make_create_statement(["a"], ["b", "c"], ["d"])
         create_statement += " WITH CLUSTERING ORDER BY (b ASC, c ASC)"
@@ -409,7 +404,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
         tablemeta = self.get_table_metadata()
         self.check_create_statement(tablemeta, create_statement)
 
-    # @unittest.skip('Failing with scylla')
     def test_compound_primary_keys_more_columns_ordering(self):
         create_statement = self.make_create_statement(["a"], ["b", "c"], ["d", "e", "f"])
         create_statement += " WITH CLUSTERING ORDER BY (b DESC, c ASC)"
@@ -417,7 +411,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
         tablemeta = self.get_table_metadata()
         self.check_create_statement(tablemeta, create_statement)
 
-    @pytest.mark.oren
     def test_composite_in_compound_primary_key_ordering(self):
         create_statement = self.make_create_statement(["a", "b"], ["c"], ["d", "e"])
         create_statement += " WITH CLUSTERING ORDER BY (c DESC)"
@@ -443,7 +436,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
         tablemeta = self.get_table_metadata()
         self.check_create_statement(tablemeta, create_statement)
 
-    # @unittest.skip('Failing with scylla')
     def test_counter(self):
         create_statement = (
             "CREATE TABLE {keyspace}.{table} ("
@@ -477,8 +469,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
         tablemeta = self.get_table_metadata()
         self.check_create_statement(tablemeta, create_statement)
 
-    # @unittest.skip('Failing with scylla')
-    @pytest.mark.oren
     def test_indexes(self):
         create_statement = self.make_create_statement(["a"], ["b", "c"], ["d", "e", "f"])
         create_statement += " WITH CLUSTERING ORDER BY (b ASC, c ASC)"
@@ -503,9 +493,7 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
         self.assertIn('CREATE INDEX d_index', statement)
         self.assertIn('CREATE INDEX e_index', statement)
 
-    # @unittest.skip('Failing with scylla')
     @greaterthancass21
-    @pytest.mark.oren
     def test_collection_indexes(self):
 
         self.session.execute("CREATE TABLE %s.%s (a int PRIMARY KEY, b map<text, text>)"
@@ -535,8 +523,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
             tablemeta = self.get_table_metadata()
             self.assertIn('(full(b))', tablemeta.export_as_string())
 
-    # @unittest.skip('Failing with scylla')
-    @pytest.mark.oren
     def test_compression_disabled(self):
         create_statement = self.make_create_statement(["a"], ["b"], ["c"])
         create_statement += " WITH compression = {}"
@@ -545,7 +531,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
         expected = "compression = {}" if CASSANDRA_VERSION < Version("3.0") else "compression = {'enabled': 'false'}"
         self.assertIn(expected, tablemeta.export_as_string())
 
-    # @unittest.skip('Failing with scylla')
     def test_non_size_tiered_compaction(self):
         """
         test options for non-size-tiered compaction strategy
@@ -572,7 +557,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
             self.assertNotIn("min_threshold", cql)
             self.assertNotIn("max_threshold", cql)
 
-    # @unittest.skip('Failing with scylla')
     def test_refresh_schema_metadata(self):
         """
         test for synchronously refreshing all cluster metadata
@@ -657,7 +641,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
 
         cluster2.shutdown()
 
-    # @unittest.skip('Failing with scylla')
     def test_refresh_keyspace_metadata(self):
         """
         test for synchronously refreshing keyspace metadata
@@ -686,7 +669,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
 
         cluster2.shutdown()
 
-    # @unittest.skip('Failing with scylla')
     def test_refresh_table_metadata(self):
         """
         test for synchronously refreshing table metadata
@@ -719,7 +701,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
 
         cluster2.shutdown()
 
-    # @unittest.skip('Failing with scylla')
     @greaterthanorequalcass30
     def test_refresh_metadata_for_mv(self):
         """
@@ -781,7 +762,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
         finally:
             cluster3.shutdown()
 
-    # @unittest.skip('Failing with scylla')
     def test_refresh_user_type_metadata(self):
         """
         test for synchronously refreshing UDT metadata in keyspace
@@ -849,8 +829,7 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
             self.assertEqual(cluster.metadata.keyspaces[self.keyspace_name].user_types, {})
             cluster.shutdown()
 
-    # @unittest.skip('Failing with scylla')
-    @pytest.mark.oren
+
     def test_refresh_user_function_metadata(self):
         """
         test for synchronously refreshing UDF metadata in keyspace
@@ -887,8 +866,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
 
         cluster2.shutdown()
 
-    # @unittest.skip('Failing with scylla')
-    @pytest.mark.oren
     def test_refresh_user_aggregate_metadata(self):
         """
         test for synchronously refreshing UDA metadata in keyspace
@@ -931,9 +908,7 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
 
         cluster2.shutdown()
 
-    # @unittest.skip('Failing with scylla')
     @greaterthanorequalcass30
-    @pytest.mark.oren
     def test_multiple_indices(self):
         """
         test multiple indices on the same column.
@@ -966,7 +941,6 @@ class SchemaMetadataTests(BasicSegregatedKeyspaceUnitTestCase):
         self.assertEqual(index_2.index_options["target"], "keys(b)")
         self.assertEqual(index_2.keyspace_name, "schemametadatatests")
 
-    # @unittest.skip('Failing with scylla')
     @greaterthanorequalcass30
     def test_table_extensions(self):
         s = self.session
@@ -1186,9 +1160,7 @@ CREATE TABLE export_udts.users (
 
         cluster.shutdown()
 
-    # @unittest.skip('Failing with scylla')
     @greaterthancass21
-    @pytest.mark.oren
     def test_case_sensitivity(self):
         """
         Test that names that need to be escaped in CREATE statements are
@@ -1257,9 +1229,7 @@ CREATE TABLE export_udts.users (
         self.assertRaises(AlreadyExists, session.execute, ddl % (ksname, cfname))
         cluster.shutdown()
 
-    # @unittest.skip('Failing with scylla')
     @local
-    @pytest.mark.oren
     def test_replicas(self):
         """
         Ensure cluster.metadata.get_replicas return correctly when not attached to keyspace
@@ -1332,7 +1302,6 @@ class KeyspaceAlterMetadata(unittest.TestCase):
         self.session.execute('DROP KEYSPACE %s' % name)
         self.cluster.shutdown()
 
-    # @unittest.skip('Failing with scylla')
     def test_keyspace_alter(self):
         """
         Table info is preserved upon keyspace alter:
@@ -1542,8 +1511,6 @@ class FunctionMetadata(FunctionTest):
                 'monotonic': False,
                 'monotonic_on': []}
 
-    # @unittest.skip('Failing with scylla')
-    @pytest.mark.oren
     def test_functions_after_udt(self):
         """
         Test to to ensure functions come after UDTs in in keyspace dump
@@ -1579,8 +1546,6 @@ class FunctionMetadata(FunctionTest):
             self.assertNotIn(-1, (type_idx, func_idx), "TYPE or FUNCTION not found in keyspace_cql: " + keyspace_cql)
             self.assertGreater(func_idx, type_idx)
 
-    # @unittest.skip('Failing with scylla')
-    @pytest.mark.oren
     def test_function_same_name_diff_types(self):
         """
         Test to verify to that functions with different signatures are differentiated in metadata
@@ -1610,8 +1575,6 @@ class FunctionMetadata(FunctionTest):
                 self.assertEqual(len(functions), 2)
                 self.assertNotEqual(functions[0].argument_types, functions[1].argument_types)
 
-    # @unittest.skip('Failing with scylla')
-    @pytest.mark.oren
     def test_function_no_parameters(self):
         """
         Test to verify CQL output for functions with zero parameters
@@ -1633,8 +1596,6 @@ class FunctionMetadata(FunctionTest):
             fn_meta = self.keyspace_function_meta[vf.signature]
             self.assertRegexpMatches(fn_meta.as_cql_query(), "CREATE FUNCTION.*%s\(\) .*" % kwargs['name'])
 
-    # @unittest.skip('Failing with scylla')
-    @pytest.mark.oren
     def test_functions_follow_keyspace_alter(self):
         """
         Test to verify to that functions maintain equality after a keyspace is altered
@@ -1662,8 +1623,6 @@ class FunctionMetadata(FunctionTest):
             finally:
                 self.session.execute('ALTER KEYSPACE %s WITH durable_writes = true' % self.keyspace_name)
 
-    # @unittest.skip('Failing with scylla')
-    @pytest.mark.oren
     def test_function_cql_called_on_null(self):
         """
         Test to verify to that that called on null argument is honored on function creation.
@@ -1691,8 +1650,6 @@ class FunctionMetadata(FunctionTest):
             self.assertRegexpMatches(fn_meta.as_cql_query(), "CREATE FUNCTION.*\) RETURNS NULL ON NULL INPUT RETURNS .*")
 
 
-# @unittest.skip('Failing with scylla')
-@pytest.mark.oren
 class AggregateMetadata(FunctionTest):
 
     @classmethod
@@ -2005,9 +1962,7 @@ class BadMetaTest(unittest.TestCase):
             self.assertIs(m._exc_info[0], self.BadMetaException)
             self.assertIn("/*\nWarning:", m.export_as_string())
 
-    # @unittest.skip('Failing with scylla')
     @greaterthancass21
-    @pytest.mark.oren
     def test_bad_user_function(self):
         self.session.execute("""CREATE FUNCTION IF NOT EXISTS %s (key int, val int)
                                 RETURNS NULL ON NULL INPUT
@@ -2025,9 +1980,7 @@ class BadMetaTest(unittest.TestCase):
                 self.assertIs(m._exc_info[0], self.BadMetaException)
                 self.assertIn("/*\nWarning:", m.export_as_string())
 
-    # @unittest.skip('Failing with scylla')
     @greaterthancass21
-    @pytest.mark.oren
     def test_bad_user_aggregate(self):
         self.session.execute("""CREATE FUNCTION IF NOT EXISTS sum_int (key int, val int)
                                 RETURNS NULL ON NULL INPUT
@@ -2048,8 +2001,6 @@ class BadMetaTest(unittest.TestCase):
 
 class DynamicCompositeTypeTest(BasicSharedKeyspaceUnitTestCase):
 
-    # @unittest.skip('Failing with scylla')
-    @pytest.mark.oren
     def test_dct_alias(self):
         """
         Tests to make sure DCT's have correct string formatting

@@ -14,6 +14,7 @@
 
 import os
 
+import pytest
 from packaging.version import Version
 
 from tests import notwindows
